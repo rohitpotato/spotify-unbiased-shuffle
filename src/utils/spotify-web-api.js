@@ -1,4 +1,6 @@
+/* eslint-disable */
 /* global module */
+
 "use strict";
 
 /**
@@ -1752,6 +1754,7 @@ var SpotifyWebApi = (function () {
    * one is the error object (null if no error), and the second is the value if the request succeeded.
    * @return {Object} Null if a callback is provided, a `Promise` object otherwise
    */
+  // eslint-disable-next-line camelcase
   Constr.prototype.seek = function (position_ms, options, callback) {
     options = options || {};
     var params = {
@@ -1806,6 +1809,7 @@ var SpotifyWebApi = (function () {
    * one is the error object (null if no error), and the second is the value if the request succeeded.
    * @return {Object} Null if a callback is provided, a `Promise` object otherwise
    */
+  // eslint-disable-next-line camelcase
   Constr.prototype.setVolume = function (volume_percent, options, callback) {
     options = options || {};
     var params = {

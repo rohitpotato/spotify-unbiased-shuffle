@@ -3,10 +3,16 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { AppProvider } from "./Context/AppContext";
+import { SelectedOptionsProvider } from "./Context/SelectedOptionsContext";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppProvider>
+      <SelectedOptionsProvider>
+        <App />
+      </SelectedOptionsProvider>
+    </AppProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

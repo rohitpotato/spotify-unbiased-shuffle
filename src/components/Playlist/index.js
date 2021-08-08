@@ -1,13 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { noop } from "../../utils/common";
+import { useSelectedOptions } from "../../Context/SelectedOptionsContext";
 
-const Playlist = ({ playlist, onClick, selected }) => {
-  const isSelected = playlist.id === 2;
+const Playlist = ({ playlist }) => {
+  const {
+    selectedPlaylists,
+    setSelectedPlaylists,
+    selectedPlaylistsOrder,
+    setSelectedPlaylistsOrder,
+  } = useSelectedOptions();
+  const isSelected = !!selectedPlaylists[playlist.id];
+  const getImage = playlist.images[playlist.images.length - 1].url;
+
+  const handlePlaylistClick = () => {
+    if (isSelected) {
+      const selected = { ...selectedPlaylists };
+      delete selected[playlist.id];
+      setSelectedPlaylists(selected);
+      const index = selectedPlaylistsOrder.find((id) => id === playlist.id);
+      const playlistOrder = [...selectedPlaylistsOrder];
+      playlistOrder.splice(index, 1);
+      setSelectedPlaylistsOrder(playlistOrder);
+    } else {
+      setSelectedPlaylists((s) => ({ ...s, [playlist.id]: playlist }));
+      setSelectedPlaylistsOrder((s) => [...s, playlist.id]);
+    }
+  };
+
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={handlePlaylistClick}
       className={`flex items-center space-x-4 rounded-md text-light md:w-64 w-full  whitespace-normal pr-6 transition-all ${
         isSelected === true
           ? "bg-spotify-dark-green hover:text-light"
@@ -17,7 +40,7 @@ const Playlist = ({ playlist, onClick, selected }) => {
       <div>
         <img
           className=" w-20 h-16 object-cover"
-          src={playlist.image}
+          src={getImage}
           alt="playlist"
         />
       </div>
@@ -30,13 +53,6 @@ const Playlist = ({ playlist, onClick, selected }) => {
 
 Playlist.propTypes = {
   playlist: PropTypes.objectOf(PropTypes.any).isRequired,
-  onClick: PropTypes.func,
-  selected: PropTypes.objectOf(PropTypes.any),
-};
-
-Playlist.defaultProps = {
-  onClick: noop,
-  selected: {},
 };
 
 export default Playlist;
