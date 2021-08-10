@@ -9,6 +9,9 @@ const DeviceSelect = ({ devices = [] }) => {
   const handleDropdownClick = (device) => {
     setSelectedDevice(device);
   };
+
+  const noDeviceAlert = devices.length === 0;
+
   return (
     <div className="w-full">
       <SectionSeparator title="Select Device" />
@@ -21,6 +24,12 @@ const DeviceSelect = ({ devices = [] }) => {
           ))}
         </DropDown>
       </div>
+
+      {noDeviceAlert && (
+        <div className="text-center font-montserrat text-red-600 font-bold mt-4">
+          Please Open Spotify on your device and refresh.
+        </div>
+      )}
     </div>
   );
 };

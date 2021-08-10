@@ -19,6 +19,7 @@ const AppProvider = ({ children }) => {
   const [expiresAt, setExpiresAt] = useState(null);
   const [playlists, setAllPlaylists] = useState([]);
   const [devices, setDevices] = useState([]);
+  const [message, setMessage] = useState("asdas");
 
   const getData = useCallback(async () => {
     if (accessToken) {
@@ -37,7 +38,8 @@ const AppProvider = ({ children }) => {
         setDevices(availableDevices);
         setLoading(false);
       } catch (e) {
-        // handle errors gracefully
+        setLoading(false);
+        setMessage({ type: "error", body: "Error! Please refresh the page." });
       }
     }
   }, [accessToken]);
@@ -52,6 +54,8 @@ const AppProvider = ({ children }) => {
 
   const values = useMemo(
     () => ({
+      message,
+      setMessage,
       loading,
       setLoading,
       accessToken,
@@ -64,7 +68,17 @@ const AppProvider = ({ children }) => {
       getData,
       refresh,
     }),
-    [accessToken, loading, refresh, devices, expiresAt, getData, playlists]
+    [
+      accessToken,
+      loading,
+      refresh,
+      devices,
+      expiresAt,
+      getData,
+      playlists,
+      message,
+      setMessage,
+    ]
   );
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
@@ -87,6 +101,8 @@ const useAppContext = () => {
     playlists,
     devices,
     refresh,
+    message,
+    setMessage,
   } = useContext(AppContext);
 
   return {
@@ -100,6 +116,8 @@ const useAppContext = () => {
     playlists,
     devices,
     refresh,
+    message,
+    setMessage,
   };
 };
 

@@ -18,6 +18,7 @@ const SelectedOptionsProvider = ({ children }) => {
     spotify,
     devices,
     setLoading,
+    setMessage,
   } = useAppContext();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const SelectedOptionsProvider = ({ children }) => {
     let i = 0;
     const { total } = playlist?.tracks || {};
     const { id } = playlist || {};
+    console.log(id, total, playlist);
     if (!id || !total) {
       return console.warn("params missing, please refresh the page!");
     }
@@ -67,16 +69,21 @@ const SelectedOptionsProvider = ({ children }) => {
         const fn = getPlaylistTracks(selectedPlaylists[selectedPlaylist]);
         return typeof fn === "function" ? fn() : undefined;
       });
-      const _ = await Promise.all(allPromises);
-      const shuffledTracks = shuffleArray(_.flat());
+      const _ = await Promise.allSettled(allPromises);
+      const allTracks = _.map((__) => __.value);
+      const shuffledTracks = shuffleArray(allTracks.flat());
       await spotify.play({
         uris: shuffledTracks.slice(0, Math.min(385, shuffledTracks.length)),
         device_id: currentDeviceId,
       });
       setLoading(false);
+      setMessage({ type: "info", body: "Playing tracks." });
     } catch (e) {
       setLoading(false);
-      console.log(e.toString());
+      setMessage({
+        type: "error",
+        body: "Something went wrong, please reload",
+      });
       // handle errors gracefully
     }
   };

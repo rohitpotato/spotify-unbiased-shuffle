@@ -43,7 +43,7 @@ const Playlist = ({ playlist }) => {
           isSelected ? "bg-spotify-green" : "bg-dark-mode-gray"
         }  px-4 py-6 rounded-md`}
       >
-        <span className="text-white text-opacity-80 font-medium">
+        <span className="text-white font-montserrat text-opacity-80 font-medium">
           {playlist.name.substring(0, 14)}..
         </span>
       </div>

@@ -6,7 +6,7 @@ import "./Playlists.css";
 
 const Playlists = ({ playlists = [] }) => (
   <>
-    <SectionSeparator title="Your Playlists" />
+    <SectionSeparator title="Select one or more playlists" />
     <div className="container">
       {playlists.map((playlist) => (
         <Playlist key={playlist.id} playlist={playlist} />

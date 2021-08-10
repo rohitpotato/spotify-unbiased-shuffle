@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Loader from "./components/Loader";
 import DeviceSelect from "./components/DeviceSelect";
 import Playlists from "./components/Playlists";
+import Alert from "./components/Alert";
 import Button from "./components/Button";
 import Play from "./components/icons/Play";
 import Refresh from "./components/icons/Refresh";
@@ -11,7 +12,8 @@ import useHook from "./hooks/useHook";
 import { useSelectedOptions } from "./Context/SelectedOptionsContext";
 
 function App() {
-  const { loading, playlists, devices, refresh } = useAppContext();
+  const { loading, playlists, devices, refresh, message, setMessage } =
+    useAppContext();
   const { handlePlay } = useSelectedOptions();
   useHook();
 
@@ -47,6 +49,7 @@ function App() {
         </div>
       </div>
       {loading && <Loader />}
+      <Alert message={message} onRemove={setMessage} />
     </>
   );
 }
