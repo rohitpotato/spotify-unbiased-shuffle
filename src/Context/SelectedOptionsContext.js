@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useAppContext } from "./AppContext";
 import { shuffleArray } from "../utils/common";
@@ -16,9 +16,15 @@ const SelectedOptionsProvider = ({ children }) => {
      * @type {SpotifyWebApi}
      */
     spotify,
+    devices,
     setLoading,
   } = useAppContext();
 
+  useEffect(() => {
+    setSelectedDevice(
+      devices.find((device) => device.is_active === true)?.name
+    );
+  }, [devices, selectedDevice]);
   const getPlaylistTracks = (playlist) => {
     let i = 0;
     const { total } = playlist?.tracks || {};
@@ -46,17 +52,35 @@ const SelectedOptionsProvider = ({ children }) => {
   };
 
   const handlePlay = async () => {
-    setLoading(true);
-    const allPromises = selectedPlaylistsOrder.map((selectedPlaylist) => {
-      const fn = getPlaylistTracks(selectedPlaylists[selectedPlaylist]);
-      return typeof fn === "function" ? fn() : undefined;
-    });
-    const _ = await Promise.all(allPromises);
-    const shuffledTracks = shuffleArray(_.flat());
-    await spotify.play({
-      uris: shuffledTracks.slice(0, Math.min(385, shuffledTracks.length)),
-    });
-    setLoading(false);
+    try {
+      setLoading(true);
+      const currentDeviceId = devices.find(
+        (d) => d.name === selectedDevice
+      )?.id;
+      if (!currentDeviceId) {
+        throw new Error({ type: "error", error: "Please select a device" });
+      }
+
+      if (!selectedPlaylistsOrder.length) {
+        throw new Error({ type: "info", error: "Please select playlists." });
+      }
+
+      const allPromises = selectedPlaylistsOrder.map((selectedPlaylist) => {
+        const fn = getPlaylistTracks(selectedPlaylists[selectedPlaylist]);
+        return typeof fn === "function" ? fn() : undefined;
+      });
+      const _ = await Promise.all(allPromises);
+      const shuffledTracks = shuffleArray(_.flat());
+      await spotify.play({
+        uris: shuffledTracks.slice(0, Math.min(385, shuffledTracks.length)),
+        device_id: currentDeviceId,
+      });
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.log(e.toString());
+      // handle errors gracefully
+    }
   };
 
   const values = {

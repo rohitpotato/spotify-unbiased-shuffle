@@ -2,9 +2,9 @@ import React from "react";
 
 const Header = () => (
   <div className="text-center">
-    <div className="flex items-center space-x-2 text-center justify-center">
+    <div className="flex items-center space-x-3 text-center justify-center">
       <img
-        className="md:h-20 md:w-20 h-16 w-16"
+        className="md:h-18s md:w-18s h-12 w-12"
         src="/spotify-logo.png"
         alt="spotify-logo"
       />

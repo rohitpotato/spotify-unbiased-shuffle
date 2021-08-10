@@ -32,7 +32,7 @@ const AppProvider = ({ children }) => {
         const [playlistsData, devicesData] = resolvedPromises;
         setAllPlaylists(playlistsData.items);
         const availableDevices = devicesData.devices.filter(
-          (device) => !device.is_restricted
+          (device) => !device.is_restricted && device.is_active
         );
         setDevices(availableDevices);
         setLoading(false);
@@ -42,22 +42,30 @@ const AppProvider = ({ children }) => {
     }
   }, [accessToken]);
 
+  const refresh = useCallback(async () => {
+    await getData();
+  }, [getData]);
+
   useEffect(() => {
     getData();
   }, [accessToken, getData]);
 
-  const values = {
-    loading,
-    setLoading,
-    accessToken,
-    setAccessToken,
-    expiresAt,
-    setExpiresAt,
-    spotify,
-    playlists,
-    devices,
-    getData,
-  };
+  const values = useMemo(
+    () => ({
+      loading,
+      setLoading,
+      accessToken,
+      setAccessToken,
+      expiresAt,
+      setExpiresAt,
+      spotify,
+      playlists,
+      devices,
+      getData,
+      refresh,
+    }),
+    [accessToken, loading, refresh, devices, expiresAt, getData, playlists]
+  );
 
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
@@ -78,6 +86,7 @@ const useAppContext = () => {
     spotify,
     playlists,
     devices,
+    refresh,
   } = useContext(AppContext);
 
   return {
@@ -90,6 +99,7 @@ const useAppContext = () => {
     spotify,
     playlists,
     devices,
+    refresh,
   };
 };
 

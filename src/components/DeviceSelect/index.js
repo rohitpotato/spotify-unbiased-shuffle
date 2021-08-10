@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import DropDown from "../DropDown";
 import SectionSeparator from "../SectionSeparator";
@@ -6,7 +6,6 @@ import { useSelectedOptions } from "../../Context/SelectedOptionsContext";
 
 const DeviceSelect = ({ devices = [] }) => {
   const { selectedDevice, setSelectedDevice } = useSelectedOptions();
-  const activeDevice = devices.find((device) => device.is_active === true);
   const handleDropdownClick = (device) => {
     setSelectedDevice(device);
   };
@@ -14,10 +13,7 @@ const DeviceSelect = ({ devices = [] }) => {
     <div className="w-full">
       <SectionSeparator title="Select Device" />
       <div className="w-full">
-        <DropDown
-          onOptionSelect={handleDropdownClick}
-          value={selectedDevice || activeDevice?.name}
-        >
+        <DropDown onOptionSelect={handleDropdownClick} value={selectedDevice}>
           {devices.map(({ id, name }) => (
             <DropDown.Option key={id} value={name}>
               {name}

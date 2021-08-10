@@ -10,7 +10,7 @@ const Playlist = ({ playlist }) => {
     setSelectedPlaylistsOrder,
   } = useSelectedOptions();
   const isSelected = !!selectedPlaylists[playlist.id];
-  const getImage = playlist.images[playlist.images.length - 1].url;
+  const getImage = playlist.images[0].url;
 
   const handlePlaylistClick = () => {
     if (isSelected) {
@@ -31,23 +31,44 @@ const Playlist = ({ playlist }) => {
     <button
       type="button"
       onClick={handlePlaylistClick}
-      className={`flex items-center space-x-4 rounded-md text-light md:w-64 w-full  whitespace-normal pr-6 transition-all ${
-        isSelected === true
-          ? "bg-spotify-dark-green hover:text-light"
-          : "bg-dark-mode-gray hover:text-spotify-dark-green "
-      }`}
+      className="bg-dark-mode-gray hover:text-spotify-green"
     >
       <div>
-        <img
-          className=" w-20 h-16 object-cover"
-          src={getImage}
-          alt="playlist"
-        />
+        <div className="p-4">
+          <img src={getImage} alt="playlist-cover" />
+        </div>
       </div>
-      <div className=" font-medium text-base font-montserrat">
-        {playlist.name}
+      <div
+        className={`${
+          isSelected ? "bg-spotify-green" : "bg-dark-mode-gray"
+        }  px-4 py-6 rounded-md`}
+      >
+        <span className="text-white text-opacity-80 font-medium">
+          {playlist.name.substring(0, 14)}..
+        </span>
       </div>
     </button>
+
+    // <button
+    //   type="button"
+    //   onClick={handlePlaylistClick}
+    //   className={`flex items-center space-x-4 rounded-md text-light md:w-64 w-full  whitespace-nowrap pr-6 transition-all overflow-hidden ${
+    //     isSelected === true
+    //       ? "bg-spotify-dark-green hover:text-light"
+    //       : "bg-dark-mode-gray hover:text-spotify-dark-green "
+    //   }`}
+    // >
+    //   <div className="">
+    //     <img
+    //       className=" min-w-max w-20 h-16 object-fit"
+    //       src={getImage}
+    //       alt="playlist"
+    //     />
+    //   </div>
+    //   <div className=" font-medium text-base font-montserrat overflow-ellipsis flex-1">
+    //     {playlist.name}
+    //   </div>
+    // </button>
   );
 };
 

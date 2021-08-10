@@ -10,9 +10,9 @@ import PropTypes from "prop-types";
 const Button = ({ children, className, type, ...rest }) => {
   const types = {
     primary:
-      "bg-spotify-green font-montserrat font-bold rounded-full text-base shadow text-purple border border-spotify-green ",
+      "bg-spotify-green font-montserrat font-bold rounded text-base shadow text-purple border border-spotify-green ",
   };
-  const defaultClass = `px-5 py-1 rounded-md font-montserrat tracking-wider font-medium`;
+  const defaultClass = `px-5 py-1 font-montserrat tracking-wider font-medium`;
   return (
     <button
       type="button"

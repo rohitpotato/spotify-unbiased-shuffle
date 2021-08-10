@@ -2,11 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import Playlist from "../Playlist";
 import SectionSeparator from "../SectionSeparator";
+import "./Playlists.css";
 
 const Playlists = ({ playlists = [] }) => (
   <>
     <SectionSeparator title="Your Playlists" />
-    <div className="flex items-center flex-wrap gap-4 w-full">
+    <div className="container">
       {playlists.map((playlist) => (
         <Playlist key={playlist.id} playlist={playlist} />
       ))}

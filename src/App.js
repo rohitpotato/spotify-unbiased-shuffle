@@ -11,26 +11,28 @@ import useHook from "./hooks/useHook";
 import { useSelectedOptions } from "./Context/SelectedOptionsContext";
 
 function App() {
-  const { loading, playlists, devices } = useAppContext();
+  const { loading, playlists, devices, refresh } = useAppContext();
   const { handlePlay } = useSelectedOptions();
   useHook();
 
   return (
     <>
-      <div className="md:w-9/12 w-11/12 mx-auto py-12 flex flex-col items-center space-y-12 justify-center">
+      <div className="md:w-9/12 w-11/12 mx-auto py-12 flex flex-col items-center space-y-12 justify-center ">
         <Header />
-        <div className="flex md:space-x-16 md:space-y-0 space-y-4 flex-col md:flex-row ">
+        <div className="flex md:space-x-16 md:space-y-0 md:static fixed bottom-0 left-0 right-0">
           <Button
             onClick={handlePlay}
-            type="primary"
-            className="flex items-center space-x-2"
+            className="flex space-x-3 border-spotify-green border border-opacity-20 bg-dark-mode-gray py-3 w-full justify-center hover:bg-spotify-green hover:text-white  text-spotify-green"
           >
             <span>PLAY</span>
             <span className="flex items-center">
               <Play />
             </span>
           </Button>
-          <Button type="primary" className="flex items-center space-x-2">
+          <Button
+            onClick={refresh}
+            className="flex space-x-3 border-spotify-green border border-opacity-20 bg-dark-mode-gray py-3 w-full justify-center hover:bg-spotify-green hover:text-white  text-spotify-green"
+          >
             <span>REFRESH</span>
             <span className="flex items-center">
               <Refresh />
