@@ -21,9 +21,7 @@ const SelectedOptionsProvider = ({ children }) => {
   } = useAppContext();
 
   useEffect(() => {
-    setSelectedDevice(
-      devices.find((device) => device.is_active === true)?.name
-    );
+    setSelectedDevice(devices?.[0]?.name);
   }, [devices, selectedDevice]);
   const getPlaylistTracks = (playlist) => {
     let i = 0;

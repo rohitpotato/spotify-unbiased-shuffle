@@ -32,7 +32,7 @@ const AppProvider = ({ children }) => {
         const [playlistsData, devicesData] = resolvedPromises;
         setAllPlaylists(playlistsData.items);
         const availableDevices = devicesData.devices.filter(
-          (device) => !device.is_restricted && device.is_active
+          (device) => !device.is_restricted
         );
         setDevices(availableDevices);
         setLoading(false);
