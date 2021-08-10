@@ -28,7 +28,6 @@ const SelectedOptionsProvider = ({ children }) => {
     let i = 0;
     const { total } = playlist?.tracks || {};
     const { id } = playlist || {};
-    console.log(id, total, playlist);
     if (!id || !total) {
       return console.warn("params missing, please refresh the page!");
     }
