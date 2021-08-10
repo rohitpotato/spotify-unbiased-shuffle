@@ -4,7 +4,7 @@
     "es6": true
   },
   "parser": "babel-eslint",
-  "extends": ["plugin:react/recommended", "airbnb", "prettier", "react-app"],
+  "extends": ["plugin:react/recommended", "airbnb", "prettier"],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
