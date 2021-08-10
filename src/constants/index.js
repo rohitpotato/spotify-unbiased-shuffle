@@ -1,4 +1,4 @@
-const clientId = "2d0b7822774843d295a29aa196459737";
+const clientId = "599c9c94cdd24f20bac550bc1444541c";
 const LOCAL_URL = "http://localhost:3000/callback";
 const PROD_URL = "https://spotify-unbiased-shuffle.vercel.app/callback";
 const redirectUrl =
