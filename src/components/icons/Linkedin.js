@@ -1,4 +1,5 @@
 import React from "react";
+import Icon from "../../images/linkedin.png";
 
 function LinkedIn() {
   return (
@@ -7,7 +8,7 @@ function LinkedIn() {
       target="_blank"
       rel="noreferrer"
     >
-      <img src="/Linkedin.png" className="h-12 w-12" alt="LinkedIn-icon" />
+      <img src={Icon} className="h-12 w-12" alt="LinkedIn-icon" />
     </a>
   );
 }

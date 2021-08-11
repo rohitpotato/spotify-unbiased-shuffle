@@ -2,13 +2,14 @@ import React from "react";
 import Github from "../icons/Github";
 import Twitter from "../icons/Twitter";
 import LinkedIn from "../icons/Linkedin";
+import Icon from "../../images/spotify-logo.png";
 
 const Header = () => (
   <div className="text-center">
     <div className="flex items-center space-x-3 text-center justify-center">
       <img
         className="md:h-18s md:w-18s h-12 w-12"
-        src="/spotify-logo.png"
+        src={Icon}
         alt="spotify-logo"
       />
       <div className=" text-light opacity-80">

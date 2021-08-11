@@ -1,4 +1,5 @@
 import React from "react";
+import Icon from "../../images/github.png";
 
 function Github() {
   return (
@@ -7,7 +8,7 @@ function Github() {
       target="_blank"
       rel="noreferrer"
     >
-      <img src="/github.png" className="h-12 w-12" alt="github-icon" />
+      <img src={Icon} className="h-12 w-12" alt="github-icon" />
     </a>
   );
 }
