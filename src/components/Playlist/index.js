@@ -10,7 +10,7 @@ const Playlist = ({ playlist }) => {
     setSelectedPlaylistsOrder,
   } = useSelectedOptions();
   const isSelected = !!selectedPlaylists[playlist.id];
-  const getImage = playlist.images[0].url;
+  const getImage = playlist?.images?.[0]?.url || "";
 
   const handlePlaylistClick = () => {
     if (isSelected) {
