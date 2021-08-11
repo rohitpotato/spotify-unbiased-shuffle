@@ -13,7 +13,7 @@ const Header = () => (
         alt="spotify-logo"
       />
       <div className=" text-light opacity-80">
-        <div className="font-montserrat md:text-3xl text-xl font-medium">
+        <div className="font-montserrat md:text-3xl text-xl font-bold">
           Spofity Unbiased Shuffle
         </div>
       </div>
