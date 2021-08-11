@@ -17,7 +17,9 @@ const Playlist = ({ playlist }) => {
       const selected = { ...selectedPlaylists };
       delete selected[playlist.id];
       setSelectedPlaylists(selected);
-      const index = selectedPlaylistsOrder.find((id) => id === playlist.id);
+      const index = selectedPlaylistsOrder.findIndex(
+        (id) => id === playlist.id
+      );
       const playlistOrder = [...selectedPlaylistsOrder];
       playlistOrder.splice(index, 1);
       setSelectedPlaylistsOrder(playlistOrder);

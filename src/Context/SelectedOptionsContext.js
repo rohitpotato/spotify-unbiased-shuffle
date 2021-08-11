@@ -49,7 +49,6 @@ const SelectedOptionsProvider = ({ children }) => {
       return allTracks;
     };
   };
-
   const handlePlay = async () => {
     try {
       setLoading(true);
