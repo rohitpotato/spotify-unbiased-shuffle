@@ -71,7 +71,7 @@ const SelectedOptionsProvider = ({ children }) => {
       const allTracks = _.map((__) => __.value);
       const shuffledTracks = shuffleArray(allTracks.flat());
       await spotify.play({
-        uris: shuffledTracks.slice(0, Math.min(385, shuffledTracks.length)),
+        uris: shuffledTracks.slice(0, Math.min(700, shuffledTracks.length)),
         device_id: currentDeviceId,
       });
       setLoading(false);
