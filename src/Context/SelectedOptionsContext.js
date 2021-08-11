@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useAppContext } from "./AppContext";
-import { shuffleArray } from "../utils/common";
+import { shuffleArray, SpotifyError } from "../utils/common";
 
 const SelectedOptionsContext = createContext();
 
@@ -56,11 +56,17 @@ const SelectedOptionsProvider = ({ children }) => {
         (d) => d.name === selectedDevice
       )?.id;
       if (!currentDeviceId) {
-        throw new Error({ type: "error", error: "Please select a device" });
+        throw new SpotifyError({
+          type: "error",
+          body: "Please select a device",
+        });
       }
 
       if (!selectedPlaylistsOrder.length) {
-        throw new Error({ type: "info", error: "Please select playlists." });
+        throw new SpotifyError({
+          type: "info",
+          body: "Please select one or more playlists.",
+        });
       }
 
       const allPromises = selectedPlaylistsOrder.map((selectedPlaylist) => {
@@ -75,13 +81,11 @@ const SelectedOptionsProvider = ({ children }) => {
         device_id: currentDeviceId,
       });
       setLoading(false);
-      setMessage({ type: "info", body: "Playing tracks." });
+      setMessage({ type: "success", body: "Playing tracks." });
     } catch (e) {
       setLoading(false);
-      setMessage({
-        type: "error",
-        body: "Something went wrong, please reload",
-      });
+      const defaultError = { type: "error", body: "Something went wrong" };
+      setMessage(e.body || defaultError);
       // handle errors gracefully
     }
   };

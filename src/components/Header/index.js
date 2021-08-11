@@ -22,6 +22,9 @@ const Header = () => (
       Unbiased shuffle for spotify playlists, combine and shuffle playlists for
       the ultimate experience!
     </div>
+    <div className="text-spotify-green font-montserrat mt-4 italic font-medium">
+      Due to restrictions by spotify, this only works with premium accounts.
+    </div>
     <div className="text-center flex space-x-4 justify-center mt-4 text-2xl ">
       <Github />
       <Twitter />

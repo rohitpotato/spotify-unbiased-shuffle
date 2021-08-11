@@ -66,3 +66,10 @@ export const shuffleArray = (arr) => {
   }
   return array;
 };
+
+export class SpotifyError extends Error {
+  constructor(body) {
+    super();
+    this.body = body;
+  }
+}
