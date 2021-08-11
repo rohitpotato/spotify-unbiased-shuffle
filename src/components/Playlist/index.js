@@ -2,30 +2,29 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useSelectedOptions } from "../../Context/SelectedOptionsContext";
 
-const Playlist = ({ playlist }) => {
+const Playlist = ({ playlist = {} }) => {
   const {
     selectedPlaylists,
     setSelectedPlaylists,
     selectedPlaylistsOrder,
     setSelectedPlaylistsOrder,
   } = useSelectedOptions();
-  const isSelected = !!selectedPlaylists[playlist.id];
+  const isSelected = !!selectedPlaylists?.[playlist?.id];
   const getImage = playlist?.images?.[0]?.url || "";
+  const playlistId = playlist?.id;
 
   const handlePlaylistClick = () => {
     if (isSelected) {
       const selected = { ...selectedPlaylists };
-      delete selected[playlist.id];
+      delete selected[playlistId];
       setSelectedPlaylists(selected);
-      const index = selectedPlaylistsOrder.findIndex(
-        (id) => id === playlist.id
-      );
+      const index = selectedPlaylistsOrder.findIndex((id) => id === playlistId);
       const playlistOrder = [...selectedPlaylistsOrder];
       playlistOrder.splice(index, 1);
       setSelectedPlaylistsOrder(playlistOrder);
     } else {
-      setSelectedPlaylists((s) => ({ ...s, [playlist.id]: playlist }));
-      setSelectedPlaylistsOrder((s) => [...s, playlist.id]);
+      setSelectedPlaylists((s) => ({ ...s, [playlistId]: playlist }));
+      setSelectedPlaylistsOrder((s) => [...s, playlistId]);
     }
   };
 
