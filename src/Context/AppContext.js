@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import PropTypes from "prop-types";
 import Q from "q";
@@ -21,6 +22,8 @@ const AppProvider = ({ children }) => {
   const [devices, setDevices] = useState([]);
   const [message, setMessage] = useState("asdas");
 
+  const nextPlaylistsPageUrl = useRef();
+
   const getData = useCallback(async () => {
     if (accessToken) {
       try {
@@ -31,6 +34,7 @@ const AppProvider = ({ children }) => {
           spotify.getMyDevices(),
         ]);
         const [playlistsData, devicesData] = resolvedPromises;
+        nextPlaylistsPageUrl.current = playlistsData.next;
         setAllPlaylists(playlistsData.items);
         const availableDevices = devicesData.devices.filter(
           (device) => !device.is_restricted
@@ -43,6 +47,17 @@ const AppProvider = ({ children }) => {
       }
     }
   }, [accessToken]);
+
+  useEffect(() => {
+    async function fetchNextPlaylists() {
+      const data = await spotify.getGeneric(nextPlaylistsPageUrl.current);
+      setAllPlaylists(playlists.concat(data.items));
+      nextPlaylistsPageUrl.current = data.next;
+    }
+    if (typeof nextPlaylistsPageUrl.current === "string") {
+      fetchNextPlaylists();
+    }
+  }, [playlists]);
 
   const refresh = useCallback(async () => {
     await getData();
