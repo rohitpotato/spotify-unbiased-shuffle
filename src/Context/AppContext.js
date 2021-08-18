@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useEffect,
   useCallback,
+  useRef,
 } from "react";
 import PropTypes from "prop-types";
 import Q from "q";
@@ -18,8 +19,11 @@ const AppProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [expiresAt, setExpiresAt] = useState(null);
   const [playlists, setAllPlaylists] = useState([]);
+  const [allPlaylistPagesLoaded, setAllPlaylistPagesLoaded] = useState(false);
   const [devices, setDevices] = useState([]);
   const [message, setMessage] = useState("asdas");
+
+  const nextPlaylistsPageUrl = useRef();
 
   const getData = useCallback(async () => {
     if (accessToken) {
@@ -31,6 +35,7 @@ const AppProvider = ({ children }) => {
           spotify.getMyDevices(),
         ]);
         const [playlistsData, devicesData] = resolvedPromises;
+        nextPlaylistsPageUrl.current = playlistsData.next;
         setAllPlaylists(playlistsData.items);
         const availableDevices = devicesData.devices.filter(
           (device) => !device.is_restricted
@@ -43,6 +48,15 @@ const AppProvider = ({ children }) => {
       }
     }
   }, [accessToken]);
+
+  const fetchNextPlaylists = useCallback(async () => {
+    setLoading(true);
+    const data = await spotify.getGeneric(nextPlaylistsPageUrl.current);
+    setAllPlaylistPagesLoaded(data.next === null);
+    setAllPlaylists(playlists.concat(data.items));
+    nextPlaylistsPageUrl.current = data.next;
+    setLoading(false);
+  }, [playlists]);
 
   const refresh = useCallback(async () => {
     await getData();
@@ -67,6 +81,8 @@ const AppProvider = ({ children }) => {
       devices,
       getData,
       refresh,
+      fetchNextPlaylists,
+      allPlaylistPagesLoaded,
     }),
     [
       accessToken,
@@ -78,6 +94,8 @@ const AppProvider = ({ children }) => {
       playlists,
       message,
       setMessage,
+      fetchNextPlaylists,
+      allPlaylistPagesLoaded,
     ]
   );
 
@@ -103,6 +121,8 @@ const useAppContext = () => {
     refresh,
     message,
     setMessage,
+    fetchNextPlaylists,
+    allPlaylistPagesLoaded,
   } = useContext(AppContext);
 
   return {
@@ -118,6 +138,8 @@ const useAppContext = () => {
     refresh,
     message,
     setMessage,
+    fetchNextPlaylists,
+    allPlaylistPagesLoaded,
   };
 };
 

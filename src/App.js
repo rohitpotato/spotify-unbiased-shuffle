@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import Header from "./components/Header";
 import Loader from "./components/Loader";
 import DeviceSelect from "./components/DeviceSelect";
@@ -12,10 +12,34 @@ import useHook from "./hooks/useHook";
 import { useSelectedOptions } from "./Context/SelectedOptionsContext";
 
 function App() {
-  const { loading, playlists, devices, refresh, message, setMessage } =
-    useAppContext();
+  const {
+    loading,
+    playlists,
+    fetchNextPlaylists,
+    allPlaylistPagesLoaded,
+    devices,
+    refresh,
+    message,
+    setMessage,
+  } = useAppContext();
   const { handlePlay } = useSelectedOptions();
   useHook();
+
+  const infiniteScrollTrigger = useRef();
+
+  useLayoutEffect(() => {
+    const intersectionObserver = new IntersectionObserver(
+      ([{ isIntersecting }]) => {
+        if (playlists.length > 0 && isIntersecting) {
+          fetchNextPlaylists();
+        }
+      }
+    );
+    intersectionObserver.observe(infiniteScrollTrigger.current);
+    return () => {
+      intersectionObserver.disconnect();
+    };
+  }, [fetchNextPlaylists, playlists.length]);
 
   return (
     <>
@@ -46,6 +70,11 @@ function App() {
         </div>
         <div className="w-full">
           <Playlists playlists={playlists} />
+          <div
+            id="infinite-loading-trigger"
+            ref={infiniteScrollTrigger}
+            className={`${loading || allPlaylistPagesLoaded ? "hidden" : ""}`}
+          />
         </div>
       </div>
       {loading && <Loader />}
