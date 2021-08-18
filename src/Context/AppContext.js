@@ -19,6 +19,7 @@ const AppProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [expiresAt, setExpiresAt] = useState(null);
   const [playlists, setAllPlaylists] = useState([]);
+  const [allPlaylistPagesLoaded, setAllPlaylistPagesLoaded] = useState(false);
   const [devices, setDevices] = useState([]);
   const [message, setMessage] = useState("asdas");
 
@@ -48,15 +49,13 @@ const AppProvider = ({ children }) => {
     }
   }, [accessToken]);
 
-  useEffect(() => {
-    async function fetchNextPlaylists() {
-      const data = await spotify.getGeneric(nextPlaylistsPageUrl.current);
-      setAllPlaylists(playlists.concat(data.items));
-      nextPlaylistsPageUrl.current = data.next;
-    }
-    if (typeof nextPlaylistsPageUrl.current === "string") {
-      fetchNextPlaylists();
-    }
+  const fetchNextPlaylists = useCallback(async () => {
+    setLoading(true);
+    const data = await spotify.getGeneric(nextPlaylistsPageUrl.current);
+    setAllPlaylistPagesLoaded(data.next === null);
+    setAllPlaylists(playlists.concat(data.items));
+    nextPlaylistsPageUrl.current = data.next;
+    setLoading(false);
   }, [playlists]);
 
   const refresh = useCallback(async () => {
@@ -82,6 +81,8 @@ const AppProvider = ({ children }) => {
       devices,
       getData,
       refresh,
+      fetchNextPlaylists,
+      allPlaylistPagesLoaded,
     }),
     [
       accessToken,
@@ -93,6 +94,8 @@ const AppProvider = ({ children }) => {
       playlists,
       message,
       setMessage,
+      fetchNextPlaylists,
+      allPlaylistPagesLoaded,
     ]
   );
 
@@ -118,6 +121,8 @@ const useAppContext = () => {
     refresh,
     message,
     setMessage,
+    fetchNextPlaylists,
+    allPlaylistPagesLoaded,
   } = useContext(AppContext);
 
   return {
@@ -133,6 +138,8 @@ const useAppContext = () => {
     refresh,
     message,
     setMessage,
+    fetchNextPlaylists,
+    allPlaylistPagesLoaded,
   };
 };
 
