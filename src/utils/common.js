@@ -1,5 +1,11 @@
 import React from "react";
-import { clientId, redirectUrl, scopes, stateKey } from "../constants";
+import {
+  clientId,
+  likedSongsKey,
+  redirectUrl,
+  scopes,
+  stateKey,
+} from "../constants";
 /* eslint-disable consistent-return */
 export const getSelectedChild = (children, key, value) => {
   const selectedChild = React.Children.map(children, (child) => {
@@ -66,10 +72,19 @@ export const shuffleArray = (arr) => {
   }
   return array;
 };
-
 export class SpotifyError extends Error {
   constructor(body) {
     super();
     this.body = body;
   }
 }
+
+export const createLikedSongsObject = () => ({
+  id: likedSongsKey,
+  name: "Liked Songs",
+  images: [
+    {
+      url: "https://misc.scdn.co/liked-songs/liked-songs-300.png",
+    },
+  ],
+});

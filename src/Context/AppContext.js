@@ -8,6 +8,7 @@ import React, {
 import PropTypes from "prop-types";
 import Q from "q";
 import SpotifyApi from "../utils/spotify-web-api";
+import { createLikedSongsObject } from "../utils/common";
 
 const AppContext = React.createContext();
 const spotify = new SpotifyApi();
@@ -31,7 +32,10 @@ const AppProvider = ({ children }) => {
           spotify.getMyDevices(),
         ]);
         const [playlistsData, devicesData] = resolvedPromises;
-        setAllPlaylists(playlistsData.items);
+        setAllPlaylists([
+          { ...createLikedSongsObject() },
+          ...playlistsData.items,
+        ]);
         const availableDevices = devicesData.devices.filter(
           (device) => !device.is_restricted
         );

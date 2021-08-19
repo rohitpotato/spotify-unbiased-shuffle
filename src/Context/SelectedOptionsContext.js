@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useAppContext } from "./AppContext";
 import { shuffleArray, SpotifyError } from "../utils/common";
+import { likedSongsKey } from "../constants";
 
 const SelectedOptionsContext = createContext();
 
@@ -49,6 +50,28 @@ const SelectedOptionsProvider = ({ children }) => {
       return allTracks;
     };
   };
+
+  const getLikedSongs = () => {
+    let i = 0;
+    const allTracks = [];
+    return async function f() {
+      const likedSongs = await spotify.getMySavedTracks({
+        limit: 50,
+        offset: i,
+        fields: "items(track(uri))",
+      });
+      i += 50;
+      const { total } = likedSongs;
+      likedSongs.items.map((obj) => allTracks.push(obj.track.uri));
+      if (i < total) {
+        await f();
+      } else {
+        return allTracks;
+      }
+      return allTracks;
+    };
+  };
+
   const handlePlay = async () => {
     try {
       setLoading(true);
@@ -68,9 +91,11 @@ const SelectedOptionsProvider = ({ children }) => {
           body: "Please select one or more playlists.",
         });
       }
-
       const allPromises = selectedPlaylistsOrder.map((selectedPlaylist) => {
-        const fn = getPlaylistTracks(selectedPlaylists[selectedPlaylist]);
+        const fn =
+          selectedPlaylist === likedSongsKey
+            ? getLikedSongs()
+            : getPlaylistTracks(selectedPlaylists[selectedPlaylist]);
         return typeof fn === "function" ? fn() : undefined;
       });
       const _ = await Promise.allSettled(allPromises);

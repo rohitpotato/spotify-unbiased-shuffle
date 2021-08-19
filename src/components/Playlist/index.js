@@ -45,31 +45,10 @@ const Playlist = ({ playlist = {} }) => {
         }  px-4 py-6 rounded-md`}
       >
         <span className="text-white font-montserrat text-opacity-80 font-medium">
-          {playlist.name.substring(0, 14)}..
+          {playlist?.name?.substring(0, 14)}..
         </span>
       </div>
     </button>
-
-    // <button
-    //   type="button"
-    //   onClick={handlePlaylistClick}
-    //   className={`flex items-center space-x-4 rounded-md text-light md:w-64 w-full  whitespace-nowrap pr-6 transition-all overflow-hidden ${
-    //     isSelected === true
-    //       ? "bg-spotify-dark-green hover:text-light"
-    //       : "bg-dark-mode-gray hover:text-spotify-dark-green "
-    //   }`}
-    // >
-    //   <div className="">
-    //     <img
-    //       className=" min-w-max w-20 h-16 object-fit"
-    //       src={getImage}
-    //       alt="playlist"
-    //     />
-    //   </div>
-    //   <div className=" font-medium text-base font-montserrat overflow-ellipsis flex-1">
-    //     {playlist.name}
-    //   </div>
-    // </button>
   );
 };
 

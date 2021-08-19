@@ -16,7 +16,6 @@ function App() {
     useAppContext();
   const { handlePlay } = useSelectedOptions();
   useHook();
-
   return (
     <>
       <div className="md:w-9/12 w-11/12 mx-auto py-12 flex flex-col items-center space-y-12 justify-center ">

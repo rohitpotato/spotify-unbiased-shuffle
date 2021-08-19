@@ -11,5 +11,6 @@ const scopes = [
   "user-read-playback-state",
 ];
 const stateKey = "state";
+const likedSongsKey = "likedSongs";
 
-export { clientId, redirectUrl, scopes, stateKey };
+export { clientId, redirectUrl, scopes, stateKey, likedSongsKey };
