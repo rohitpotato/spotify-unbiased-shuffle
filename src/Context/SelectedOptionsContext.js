@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import PropTypes from "prop-types";
 import { useAppContext } from "./AppContext";
 import { shuffleArray, SpotifyError } from "../utils/common";
@@ -20,6 +26,7 @@ const SelectedOptionsProvider = ({ children }) => {
     devices,
     setLoading,
     setMessage,
+    playlists,
   } = useAppContext();
 
   useEffect(() => {
@@ -115,6 +122,20 @@ const SelectedOptionsProvider = ({ children }) => {
     }
   };
 
+  const selectAllPlaylists = useCallback(() => {
+    const allPlaylistIds = playlists.reduce((acc, playlist) => {
+      acc[playlist.id] = playlist;
+      return acc;
+    }, {});
+    setSelectedPlaylists(allPlaylistIds);
+    setSelectedPlaylistsOrder(Object.keys(allPlaylistIds));
+  }, [playlists]);
+
+  const clearAllSelectedPlaylists = useCallback(() => {
+    setSelectedPlaylists({});
+    setSelectedPlaylistsOrder([]);
+  });
+
   const values = {
     selectedPlaylists,
     setSelectedPlaylists,
@@ -123,6 +144,8 @@ const SelectedOptionsProvider = ({ children }) => {
     selectedPlaylistsOrder,
     setSelectedPlaylistsOrder,
     handlePlay,
+    selectAllPlaylists,
+    clearAllSelectedPlaylists,
   };
   return (
     <SelectedOptionsContext.Provider value={values}>
@@ -144,6 +167,8 @@ const useSelectedOptions = () => {
     selectedPlaylistsOrder,
     setSelectedPlaylistsOrder,
     handlePlay,
+    selectAllPlaylists,
+    clearAllSelectedPlaylists,
   } = useContext(SelectedOptionsContext);
   return {
     selectedDevice,
@@ -153,6 +178,8 @@ const useSelectedOptions = () => {
     selectedPlaylistsOrder,
     setSelectedPlaylistsOrder,
     handlePlay,
+    selectAllPlaylists,
+    clearAllSelectedPlaylists,
   };
 };
 
