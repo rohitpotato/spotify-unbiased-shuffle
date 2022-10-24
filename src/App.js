@@ -14,7 +14,8 @@ import { useSelectedOptions } from "./Context/SelectedOptionsContext";
 function App() {
   const { loading, playlists, devices, refresh, message, setMessage } =
     useAppContext();
-  const { handlePlay } = useSelectedOptions();
+  const { handlePlay, selectAllPlaylists, clearAllSelectedPlaylists } =
+    useSelectedOptions();
   useHook();
   return (
     <>
@@ -44,7 +45,11 @@ function App() {
           <DeviceSelect devices={devices} />
         </div>
         <div className="w-full">
-          <Playlists playlists={playlists} />
+          <Playlists
+            selectAllPlaylists={selectAllPlaylists}
+            playlists={playlists}
+            clearAllSelectedPlaylists={clearAllSelectedPlaylists}
+          />
         </div>
       </div>
       {loading && <Loader />}
