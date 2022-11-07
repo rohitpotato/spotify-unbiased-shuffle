@@ -1,4 +1,6 @@
-import { useCallback, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect } from "react";
+import { inject } from "@vercel/analytics";
+
 import { useAppContext } from "../Context/AppContext";
 import { stateKey } from "../constants";
 import { login, hashParams } from "../utils/common";
@@ -6,6 +8,12 @@ import { login, hashParams } from "../utils/common";
 const useHook = () => {
   const { accessToken, setAccessToken, setExpiresAt, expiresAt } =
     useAppContext();
+
+  useEffect(() => {
+    // vercel analytics
+    inject();
+  }, []);
+
   const getToken = useCallback(() => {
     if (accessToken && expiresAt && new Date().getTime() < expiresAt) {
       return null;
